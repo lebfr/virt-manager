@@ -241,7 +241,8 @@ class Installer(object):
 
         :param guest: Guest instance we are installing
         """
-        guest.on_reboot = "destroy"
+        if not self.import_install:
+            guest.on_reboot = "destroy"
         self._alter_treemedia_bootconfig(guest)
 
         bootdev = self._install_bootdev
@@ -665,13 +666,17 @@ class Installer(object):
 
     def start_install(self, user_guest, meter=None,
                       dry=False, return_xml=False,
-                      doboot=True, transient=False):
+                      doboot=True, transient=False,
+                      import_install=False):
         """
         Begin the guest install. Will add install media to the guest config,
         launch it, then redefine the XML with the postinstall config.
 
         :param return_xml: Don't create the guest, just return generated XML
         """
+
+        self.import_install = import_install
+
         if not self._is_reinstall and not return_xml:
             Guest.validate_name(self.conn, user_guest.name)
         self.set_install_defaults(user_guest)

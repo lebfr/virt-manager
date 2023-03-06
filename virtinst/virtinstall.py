@@ -962,7 +962,8 @@ def start_install(guest, installer, options):
             domain = installer.start_install(
                     guest, meter=meter,
                     doboot=not options.noreboot,
-                    transient=options.transient)
+                    transient=options.transient,
+                    import_install=options.import_install)
         except:  # noqa
             virtinst.Installer.cleanup_created_disks(guest, meter)
             raise
